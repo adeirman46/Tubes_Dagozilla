@@ -7,47 +7,46 @@ ros::NodeHandle  nh;
 control::HardwareCommand hc_msg;
 control::EncoderData en_msg;
 
-// class DCmotor{
-//     private:
-//         DigitalOut enable_R;        // the enabler for R rotation
-//         DigitalOut enable_L;        // the enabler for L rotation
-//         PwmOut motor_R;             // the pwm channel for R rotation
-//         PwmOut motor_L;             // the pwm channel for L rotation
-//         double pwm;                 // the pwm value send by user
+class DCmotor{
+    private:
+        DigitalOut enable_R;        // the enabler for R rotation
+        DigitalOut enable_L;        // the enabler for L rotation
+        PwmOut motor_R;             // the pwm channel for R rotation
+        PwmOut motor_L;             // the pwm channel for L rotation
+        double pwm;                 // the pwm value send by user
     
-//     public:
-//         // user defined constructor
-//         DCmotor(PinName enable_pin_R, PinName enable_pin_L, PinName motor_pin_R, PinName motor_pin_L) : enable_R(enable_pin_R), enable_L(enable_pin_L), motor_R(motor_pin_R), motor_L(motor_pin_L){
-//             enable_R = 1;
-//             enable_L = 1;
+    public:
+        // user defined constructor
+        DCmotor(PinName enable_pin_R, PinName enable_pin_L, PinName motor_pin_R, PinName motor_pin_L) : enable_R(enable_pin_R), enable_L(enable_pin_L), motor_R(motor_pin_R), motor_L(motor_pin_L){
+            enable_R = 1;
+            enable_L = 1;
 
-//             motor_R.write(0);
-//             motor_L.write(0);
-//         }
+            motor_R.write(0);
+            motor_L.write(0);
+        }
 
-//         // method to rotate the motor (seting the pwm)
-//         void rotate(float pwm){
-//                 if (pwm >= 0){
-//                     motor_L.write(0);
-//                     motor_R.write(pwm);
-//                 }
-//                 else if (pwm < 0){
-//                     motor_R.write(0);
-//                     motor_L.write(abs(pwm));
-//                 }
-//         }
-// };
+        // method to rotate the motor (seting the pwm)
+        void rotate(float pwm){
+                if (pwm >= 0){
+                    motor_L.write(0);
+                    motor_R.write(pwm);
+                }
+                else if (pwm < 0){
+                    motor_R.write(0);
+                    motor_L.write(abs(pwm));
+                }
+        }
+};
 
-// DCmotor motor_FR(p1, p2, p3, p4);
-// DCmotor motor_FL(p5, p6, p7, p8);
-// DCmotor motor_BR(p9, p10, p11, p12);
-// DCmotor motor_BL(p13, p14, p15, p16);
+DCmotor motor_FR(D2, D4, D3, D5);
+DCmotor motor_FL(D7, D8, D6, D9);
+DCmotor motor_BR(D12, D13, D10, D11);
+
 
 void messageCb( const control::HardwareCommand& hardware_msg) {
-    // motor_FR.rotate(hardware_msg.motor1);
-    // motor_FL.rotate(hardware_msg.motor2);
-    // motor_BR.rotate(hardware_msg.motor3);
-    // motor_BL.rotate(hardware_msg.motor4);
+    motor_FR.rotate(hardware_msg.motor1);
+    motor_FL.rotate(hardware_msg.motor2);
+    motor_BR.rotate(hardware_msg.motor3);
     hc_msg.motor1 = hardware_msg.motor1;
     hc_msg.motor2 = hardware_msg.motor2;
     hc_msg.motor3 = hardware_msg.motor3;
